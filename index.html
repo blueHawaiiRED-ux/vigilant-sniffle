@@ -2,10 +2,54 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>私のホームページ</title>
+    <title>挑戦状！</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+        h1 { color: #333; }
+        #escape-btn {
+            position: absolute;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+    </style>
 </head>
 <body>
-    <h1>世界中のみなさん、こんにちは！</h1>
-    <p>GitHub Pagesを使って、完全に無料でサイトを作れました！</p>
+
+    <h1>このボタンをクリックできたら君の勝ち！</h1>
+    <!-- 初期位置を設定したボタン -->
+    <button id="escape-btn" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">ここをクリック</button>
+
+    <script>
+        const button = document.getElementById('escape-btn');
+
+        // ボタンにマウスが近づいた（重なった）ときの処理
+        button.addEventListener('mouseover', () => {
+            // 画面の幅と高さから、ランダムな位置を計算
+            const x = Math.random() * (window.innerWidth - button.offsetWidth);
+            const y = Math.random() * (window.innerHeight - button.offsetHeight);
+            
+            // ボタンの位置を瞬間移動させる
+            button.style.transform = 'none'; // 初期中央配置の解除
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+        });
+    </script>
+
 </body>
 </html>
