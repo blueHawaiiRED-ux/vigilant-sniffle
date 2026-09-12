@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Don't push</title>
     <style>
-        /* 通常時の背景（明るいグレー） */
         body {
             display: flex;
             flex-direction: column;
@@ -17,6 +16,10 @@
             background-color: #f0f0f0;
             overflow: hidden;
             transition: background-color 0.5s ease;
+        }
+        /* 💡 真っ暗になった後はマウスカーソルも非表示にする */
+        body.fullscreen-mode {
+            cursor: none;
         }
         h1 { color: #333; }
         #escape-btn {
@@ -31,7 +34,6 @@
             cursor: pointer;
             transition: all 0.1s ease;
         }
-        /* クリア画面の文字（最初は見えない） */
         #clear-text {
             display: none;
             color: #ffffff;
@@ -43,9 +45,9 @@
 </head>
 <body>
 
-    <h1 id="title"></h1>
+    <h1 id="title">ボタンを押さないでください</h1>
     <button id="escape-btn" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">Don't push</button>
-    <div id="clear-text"> <br><span style="font-size: 18px;"> </span></div>
+    <div id="clear-text">閉じ込められました。 <br><span style="font-size: 18px;">もう戻れません。</span></div>
 
     <script>
         const button = document.getElementById('escape-btn');
@@ -55,7 +57,7 @@
 
         // 1. ボタンがマウスから逃げる処理
         button.addEventListener('mouseover', () => {
-            if (isStopped) return; // 10秒経って止まっていたら逃げない
+            if (isStopped) return; 
             const x = Math.random() * (window.innerWidth - button.offsetWidth);
             const y = Math.random() * (window.innerHeight - button.offsetHeight);
             button.style.transform = 'none';
@@ -63,39 +65,24 @@
             button.style.top = `${y}px`;
         });
 
-        // 2. タイマー：10秒（10000ミリ秒）経ったらボタンを中央に止める
+        // 2. タイマー：10秒経ったらボタンを中央に止める
         setTimeout(() => {
             isStopped = true;
-            title.innerText = " ";
-            button.style.backgroundColor = "#2ed573"; // ボタンを緑色に変える
+            title.innerText = "さあ、押してください...";
+            button.style.backgroundColor = "#2ed573"; 
             button.style.top = "50%";
             button.style.left = "50%";
             button.style.transform = "translate(-50%, -50%)";
         }, 10000);
 
-        // 3. ボタンを押した瞬間の処理（1回だけ実行）
+        // 3. ボタンを押した瞬間の処理
         button.addEventListener('click', () => {
-            // 画面を真っ暗にする
             document.body.style.backgroundColor = "#000000";
-            
-            // ボタンとタイトルを消して、クリア文字を出す
+            document.body.classList.add('fullscreen-mode');
             button.style.display = "none";
             title.style.display = "none";
             clearText.style.display = "block";
-
-            // ブラウザにフルスクリーン（全画面）をリクエストする（1回だけ実行）
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari */
-                document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
-                document.documentElement.msRequestFullscreen();
-            }
         });
     </script>
-
 </body>
 </html>
-
